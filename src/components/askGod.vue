@@ -139,6 +139,5 @@ const calcResult = () => {
   align-items: center;
   font-size: 40px;
 }
-
 </style>
 
