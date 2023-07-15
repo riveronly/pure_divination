@@ -4,3 +4,5 @@
 
 农历日期获取 https://github.com/6tail/lunar-typescript
 原型 https://github.com/kev1nzh37/ask-god
+
+直达链接 https://aicecoke.github.io/askGod/
