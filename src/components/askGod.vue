@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {onMounted, reactive} from "vue"
 import {Lunar, Solar} from 'lunar-typescript';
 
