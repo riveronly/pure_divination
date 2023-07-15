@@ -1,17 +1,16 @@
 <template>
   <div>
-    <ask-god/>
+    <PureDivination/>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import AskGod from "./components/askGod.vue";
+import PureDivination from "./components/PureDivination.vue";
 
 export default defineComponent({
-  components: {AskGod}
+  components: {PureDivination}
 })
-
 </script>
 <style>
 </style>
