@@ -3,6 +3,7 @@
     <ask-god/>
   </div>
 </template>
+
 <script lang="ts">
 import {defineComponent} from "vue";
 import AskGod from "./components/askGod.vue";
