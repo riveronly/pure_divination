@@ -10,25 +10,27 @@
     </div>
 
     <!--结果-->
-    <div v-show="state.cur.title" class="result">
-      <div class="type">
-        {{ state.cur.type }}
-      </div>
-      <div>
-        <span>卦象：</span>
-        {{ state.cur.title }}
-      </div>
-      <div>
-        <span>简译：</span>
-        {{ state.cur.authorSay }}
-      </div>
-      <div>
-        <span>属相：</span>
-        {{ state.cur.number }}
-      </div>
-      <div>
-        <span>详情：</span>
-        {{ state.cur.desc }}
+    <div v-for="(item,index) in [state.cause,state.elapse,state.outcome]" :key="index" :item="item">
+      <div v-show="item.title" class="result">
+        <div class="type">
+          {{ index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour) }} {{ item.type }}
+        </div>
+        <div v-if="index===2">
+          <span>时辰：</span>
+          子丑寅卯辰巳午未申酉戌亥
+        </div>
+        <div>
+          <span>简译：</span>
+          {{ item.authorSay }}
+        </div>
+        <div>
+          <span>属相：</span>
+          {{ item.number }}
+        </div>
+        <div>
+          <span>详情：</span>
+          {{ item.desc }}
+        </div>
       </div>
     </div>
 
@@ -44,7 +46,14 @@ onMounted(() => {
 })
 
 const state = reactive({
-  cur: {type: "", title: "", desc: "", number: "", authorSay: ""},
+  cause: {type: "", title: "", desc: "", number: "", authorSay: ""},
+  elapse: {type: "", title: "", desc: "", number: "", authorSay: ""},
+  outcome: {type: "", title: "", desc: "", number: "", authorSay: ""},
+
+  lunarMonth: 0,
+  lunarDay: 0,
+  lunarHour: 0,
+
   valueObject: [
     {
       type: '大安',
@@ -101,16 +110,30 @@ const calcResult = () => {
 
   const lunarMonth = lunar.getMonth();
   const lunarDay = lunar.getDay();
-  const lunarHour = lunar.getTimeZhiIndex();
+  const lunarHour = lunar.getTimeZhiIndex() + 1;
 
-  let resultSum = 0;
-  resultSum += lunarMonth % 6 || 6;
-  resultSum += (lunarDay - 1) % 6;
-  resultSum += (lunarHour - 1) % 6;
-  let hourLuckStatusIndex = (resultSum % 6) || 0;
+  let palacePosition: number;//宫位(1-6)
+  let positionIndex: number;
 
-  state.cur = state?.valueObject[hourLuckStatusIndex]
+  //月
+  state.lunarMonth = lunarMonth
+  palacePosition = lunarMonth % 6 || 6;
+  positionIndex = palacePosition - 1;
+  state.cause = state?.valueObject[positionIndex]
+
+  //日
+  state.lunarDay = lunarDay
+  palacePosition += (lunarDay - 1) % 6;
+  positionIndex = ((palacePosition % 6) || 6) - 1;
+  state.elapse = state?.valueObject[positionIndex]
+
+  //时
+  state.lunarHour = lunarHour
+  palacePosition += (lunarHour - 1) % 6;
+  positionIndex = ((palacePosition % 6) || 6) - 1;
+  state.outcome = state?.valueObject[positionIndex]
 }
+
 </script>
 
 <style scoped>
