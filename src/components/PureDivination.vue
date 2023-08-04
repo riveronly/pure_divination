@@ -10,7 +10,7 @@
     </div>
 
     <!--结果-->
-    <div v-for="(item,index) in [state.outcome]" :key="index" :item="item">
+    <div v-for="(item,index) in [state.cause,state.elapse,state.outcome]" :key="index" :item="item">
       <div v-show="item.title" class="result">
         <div class="type">
           {{ index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour) }} {{ item.type }}
