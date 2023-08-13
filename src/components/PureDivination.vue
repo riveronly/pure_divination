@@ -2,31 +2,32 @@
   <div>
 
     <!--时辰-->
-    <div>
+    <div style="display: flex;flex-direction: row;justify-content: space-between">
       <!--公历今日时辰-->
-      <el-text class="type">{{ new Date().toLocaleDateString() + " " + new Date().getHours() + "时" }}</el-text>
+      <el-text class="type">{{ new Date().toLocaleDateString() + "日" + new Date().getHours() + "时" }}</el-text>
       <!--农历今日时辰-->
       <el-text class="type">{{ getLunarDate() }}</el-text>
     </div>
 
     <!--结果-->
-    <div v-for="(item,index) in [state.cause,state.elapse,state.outcome]" :key="index" :item="item">
-      <div v-show="item.title" class="result">
+    <div style="display: flex;flex-direction: row;">
+      <div v-for="(item,index) in [state.cause,state.elapse,state.outcome]" v-show="item.title" :key="index"
+           :item="item" :style="{backgroundColor: index===2?'#5f93a0':''}" class="result">
         <div class="type">
           {{ index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour) }} {{ item.type }}
         </div>
         <div v-if="index===2">
           <span>时辰：</span>
-          子丑寅卯辰巳午未申酉戌亥
+          {{ Lunar.fromDate(new Date()).getTimeZhi() }}
         </div>
         <div>
           <span>简译：</span>
           {{ item.authorSay }}
         </div>
-        <div>
-          <span>属相：</span>
-          {{ item.number }}
-        </div>
+        <!--        <div>-->
+        <!--          <span>属相：</span>-->
+        <!--          {{ item.number }}-->
+        <!--        </div>-->
         <div>
           <span>详情：</span>
           {{ item.desc }}
@@ -101,7 +102,7 @@ const state = reactive({
 })
 
 const getLunarDate = () => {
-  return Lunar.fromDate(new Date()).toString() + " " + Lunar.fromDate(new Date()).getTimeZhi() + "时"
+  return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时"
 }
 
 const calcResult = () => {
