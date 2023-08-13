@@ -10,7 +10,7 @@
     </div>
 
     <!--结果-->
-    <div style="display: flex;flex-direction: row;">
+    <div class="main">
       <div v-for="(item,index) in [state.cause,state.elapse,state.outcome]" v-show="item.title" :key="index"
            :item="item" :style="{backgroundColor: index===2?'#5f93a0':''}" class="result">
         <div class="type">
@@ -163,6 +163,17 @@ const calcResult = () => {
   justify-content: center;
   align-items: center;
   font-size: 40px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 1080px) {
+  .main {
+    flex-wrap: wrap;
+  }
 }
 </style>
 
