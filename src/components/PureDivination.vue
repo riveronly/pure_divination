@@ -1,12 +1,16 @@
 <template>
   <div>
 
+    <div>
+      <el-text class="type">[需诚 需正 需疑]</el-text>
+    </div>
+
     <!--时辰-->
     <div style="display: flex;flex-direction: row;justify-content: space-between">
-      <!--公历今日时辰-->
-      <el-text class="type">{{ new Date().toLocaleDateString() + "日" + new Date().getHours() + "时" }}</el-text>
       <!--农历今日时辰-->
       <el-text class="type">{{ getLunarDate() }}</el-text>
+      <!--公历今日时辰-->
+      <el-text class="type">{{ new Date().toLocaleDateString() + "日" + new Date().getHours() + "时" }}</el-text>
     </div>
 
     <!--结果-->
@@ -16,22 +20,17 @@
         <div class="type">
           {{ index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour) }} {{ item.type }}
         </div>
-        <div v-if="index===2">
-          <span>时辰：</span>
-          {{ Lunar.fromDate(new Date()).getTimeZhi() }}
-        </div>
+
         <div>
           <span>简译：</span>
-          {{ item.authorSay }}
+          {{ item.title }}
         </div>
-        <!--        <div>-->
-        <!--          <span>属相：</span>-->
-        <!--          {{ item.number }}-->
-        <!--        </div>-->
+
         <div>
           <span>详情：</span>
           {{ item.desc }}
         </div>
+
       </div>
     </div>
 
