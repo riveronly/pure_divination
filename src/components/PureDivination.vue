@@ -23,7 +23,7 @@
 
         <div>
           <span>简译：</span>
-          {{ item.title }}
+          {{ item.authorSay }}
         </div>
 
         <div>
