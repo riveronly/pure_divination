@@ -1,9 +1,9 @@
 <template>
   <div>
 
-    <div>
-      <el-text class="type">[需诚 需正 需疑]</el-text>
-    </div>
+    <!--    <div>
+          <el-text class="type">[需诚 需正 需疑]</el-text>
+        </div>-->
 
     <!--时辰-->
     <div style="display: flex;flex-direction: row;justify-content: space-between">
