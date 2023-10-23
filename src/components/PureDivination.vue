@@ -47,6 +47,10 @@ const getLunarDate = () => {
   return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时";
 };
 
+const getTypeNum = (index: number) => {
+  return index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour);
+};
+
 const calcResult = () => {
   const solar = Solar.fromDate(new Date());
   const lunar = solar.getLunar();
@@ -77,9 +81,6 @@ const calcResult = () => {
   state.outcome = hexagramArray[positionIndex];
 };
 
-const getTypeNum = (index: number) => {
-  return index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour);
-};
 </script>
 
 <style scoped>
