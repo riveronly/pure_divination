@@ -1,16 +1,20 @@
 <template>
   <div>
-    <PureDivination/>
+    <Loading v-if="isLoading" />
+    <PureDivination v-show="!isLoading" @stopLoading="stopLoading" />
   </div>
 </template>
 
-<script lang="ts">
-import {defineComponent} from "vue";
-import PureDivination from "./components/PureDivination.vue";
+<script lang="ts" setup>
+  import { ref } from "vue";
+  import PureDivination from "./components/PureDivination.vue";
+  import Loading from "./components/Loading.vue";
 
-export default defineComponent({
-  components: {PureDivination}
-})
+  const isLoading = ref(true)
+  const stopLoading = () => {
+    isLoading.value = false
+  }
 </script>
+
 <style>
 </style>
