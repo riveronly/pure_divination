@@ -167,6 +167,7 @@ const calcResult = () => {
   100% {
     transform: translateY(0);
     opacity: 1;
+    background-color: #5f93a0;
   }
 }
 
