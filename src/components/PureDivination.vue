@@ -6,18 +6,21 @@
     </div>
 
     <div class="main">
-      <div v-for="(item, index) in [state.cause, state.elapse, state.outcome]" v-show="item.title" :key="index"
-           :style="{backgroundColor: index===2?'#5f93a0':''}" class="result">
-        <div class="type">
-          {{ getTypeNum(index) }} {{ item.type }}
-        </div>
-        <div>
-          <span>简译：</span>
-          {{ item.authorSay }}
-        </div>
-        <div>
-          <span>详情：</span>
-          {{ item.desc }}
+      <div style="border: 1px #000000 solid;">
+        <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-show="item.type"
+             :key="index"
+             class="result">
+          <div class="type">
+            {{ getTypeNum(2) }} {{ item.type }}
+          </div>
+          <div>
+            <span>总结:</span>
+            {{ item.summary }}
+          </div>
+          <div>
+            <span>详情:</span>
+            {{ item.desc }}
+          </div>
         </div>
       </div>
     </div>
@@ -25,63 +28,63 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, reactive, defineEmits } from "vue";
-  import { Lunar, Solar } from 'lunar-typescript';
-  import { hexagramArray } from "./config.ts";
+import {onMounted, reactive} from "vue";
+import {Lunar, Solar} from 'lunar-typescript';
+import {hexagramArray} from "./config.ts";
 
-  const emit = defineEmits(["stopLoading"])
-  const state = reactive({
-    cause: {type: "", title: "", desc: "", number: "", authorSay: ""},
-    elapse: {type: "", title: "", desc: "", number: "", authorSay: ""},
-    outcome: {type: "", title: "", desc: "", number: "", authorSay: ""},
+const emit = defineEmits(["stopLoading"])
+const state = reactive({
+  resultMonth: {type: "", desc: "", summary: ""},
+  resultDay: {type: "", desc: "", summary: ""},
+  resultHour: {type: "", desc: "", summary: ""},
 
-    lunarMonth: 0,
-    lunarDay: 0,
-    lunarHour: 0,
-  });
+  lunarMonth: 0,
+  lunarDay: 0,
+  lunarHour: 0,
+});
 
-  onMounted(() => {
-    calcResult();
-    emit("stopLoading")
-  });
+onMounted(() => {
+  calcResult();
+  emit("stopLoading")
+});
 
-  const getLunarDate = () => {
-    return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时";
-  };
+const getLunarDate = () => {
+  return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时";
+};
 
-  const getTypeNum = (index: number) => {
-    return index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour);
-  };
+const getTypeNum = (index: number) => {
+  return index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour);
+};
 
-  const calcResult = () => {
-    const solar = Solar.fromDate(new Date());
-    const lunar = solar.getLunar();
+const calcResult = () => {
+  const solar = Solar.fromDate(new Date());
+  const lunar = solar.getLunar();
 
-    const lunarMonth = lunar.getMonth();
-    const lunarDay = lunar.getDay();
-    const lunarHour = lunar.getTimeZhiIndex() + 1;
+  const lunarMonth = lunar.getMonth();
+  const lunarDay = lunar.getDay();
+  const lunarHour = lunar.getTimeZhiIndex() + 1;
 
-    let palacePosition: number; //宫位(1-6)
-    let positionIndex: number;
+  let palacePosition: number; //宫位(1-6)
+  let positionIndex: number;
 
-    //月
-    state.lunarMonth = lunarMonth;
-    palacePosition = lunarMonth % 6 || 6;
-    positionIndex = palacePosition - 1;
-    state.cause = hexagramArray[positionIndex];
+  //月
+  state.lunarMonth = lunarMonth;
+  palacePosition = lunarMonth % 6 || 6;
+  positionIndex = palacePosition - 1;
+  state.resultMonth = hexagramArray[positionIndex];
 
-    //日
-    state.lunarDay = lunarDay;
-    palacePosition += (lunarDay - 1) % 6;
-    positionIndex = ((palacePosition % 6) || 6) - 1;
-    state.elapse = hexagramArray[positionIndex];
+  //日
+  state.lunarDay = lunarDay;
+  palacePosition += (lunarDay - 1) % 6;
+  positionIndex = ((palacePosition % 6) || 6) - 1;
+  state.resultDay = hexagramArray[positionIndex];
 
-    //时
-    state.lunarHour = lunarHour;
-    palacePosition += (lunarHour - 1) % 6;
-    positionIndex = ((palacePosition % 6) || 6) - 1;
-    state.outcome = hexagramArray[positionIndex];
-  };
+  //时
+  state.lunarHour = lunarHour;
+  palacePosition += (lunarHour - 1) % 6;
+  positionIndex = ((palacePosition % 6) || 6) - 1;
+  state.resultHour = hexagramArray[positionIndex];
+};
 </script>
 
 <style scoped>
@@ -91,7 +94,6 @@
   align-items: start;
   text-align: start;
   justify-content: start;
-  border: 1px #000000 solid;
   padding: 10px;
 }
 
@@ -119,25 +121,29 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  animation: opacity-translate 1s;
+  /*animation: opacity-translate 1s;*/
 }
 
+/*
 .result:first-child {
   opacity: 0;
-  animation: opacity-translate 1s 1s forwards;
+  animation: opacity-translate 1s forwards;
 }
+
 .result:nth-child(2) {
   opacity: 0;
-  animation: opacity-translate 1s 2s forwards;
+  animation: opacity-translate 1s forwards;
 }
+*/
+
 .result:last-child {
   opacity: 0;
-  animation: opacity-translate 1s 3s forwards;
+  animation: opacity-translate 1s forwards;
 }
 
 @keyframes opacity-translate {
   0% {
-    transform: translateY(-100px);
+    transform: translateY(-30px);
     opacity: 0;
   }
 
