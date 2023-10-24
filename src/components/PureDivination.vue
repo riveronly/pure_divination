@@ -2,7 +2,7 @@
   <div>
     <div class="info">
       <el-text class="type">{{ getLunarDate() }}</el-text>
-      <el-text class="type">{{ new Date().toLocaleDateString() + "日" + new Date().getHours() + "时" }}</el-text>
+      <el-text class="type">{{ getDate() }}</el-text>
     </div>
 
     <div class="main">
@@ -48,14 +48,31 @@ onMounted(() => {
   emit("stopLoading")
 });
 
+/**
+ * 获取农历日期
+ */
 const getLunarDate = () => {
   return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时";
 };
 
+/**
+ * 获取公历日期
+ */
+const getDate = () => {
+  return new Date().toLocaleDateString() + "日" + new Date().getHours() + "时";
+};
+
+/**
+ * 获取对应落宫步数
+ * @param index
+ */
 const getTypeNum = (index: number) => {
   return index === 0 ? state.lunarMonth : (index === 1 ? state.lunarDay : state.lunarHour);
 };
 
+/**
+ * 计算卦象结果
+ */
 const calcResult = () => {
   const solar = Solar.fromDate(new Date());
   const lunar = solar.getLunar();
