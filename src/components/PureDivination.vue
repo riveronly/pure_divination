@@ -174,5 +174,14 @@ const calcResult = () => {
   .main {
     flex-wrap: wrap;
   }
+
+  .info {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .type {
+    font-size: 20px;
+  }
 }
 </style>
