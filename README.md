@@ -6,4 +6,4 @@
 
 项目原型 https://github.com/kev1nzh37/ask-god
 
-直达链接 https://aicecoke.github.io/askGod/
+直达链接 https://aicecoke.github.io/PureDivination
