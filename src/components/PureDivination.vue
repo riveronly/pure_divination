@@ -130,7 +130,7 @@ const calcResult = () => {
   justify-content: start;
   padding: 20px;
   border-radius: 10px;
-  backdrop-filter: blur(30px)
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .result > :not(:last-child) div {
@@ -138,7 +138,7 @@ const calcResult = () => {
 }
 
 .result > div > span {
-  color: #27ae60;
+  color: #48718F;
 }
 
 .type {
