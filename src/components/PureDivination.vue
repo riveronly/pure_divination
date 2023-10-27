@@ -6,8 +6,8 @@
     </div>
 
     <div class="main">
-      <div style="border: 1px #000000 solid;">
-        <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-show="item.type"
+      <div>
+        <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
              :key="index"
              class="result">
           <div class="type">
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive} from "vue";
+import {nextTick, onMounted, reactive} from "vue";
 import {Lunar, Solar} from 'lunar-typescript';
 import {hexagramArray} from "./config.ts";
 
@@ -41,12 +41,29 @@ const state = reactive({
   lunarMonth: 0,
   lunarDay: 0,
   lunarHour: 0,
+  refresh: true,
 });
 
 onMounted(() => {
-  calcResult();
   emit("stopLoading")
+  calcResult()
+  updateTimeRemaining()
 });
+
+const updateTimeRemaining = () => {
+  const now = new Date();
+  const nextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(now.getHours()) + (now.getHours() % 2 === 0 ? 1 : 2), 0, 0, 0).getTime();
+  const timeRemaining = nextPeriod - now.getTime();
+  console.log("距下次更新还剩" + (timeRemaining / 1000 / 60).toFixed(0) + "分钟")
+  setTimeout(() => {
+    state.refresh = false
+    nextTick(() => {
+      calcResult()
+      state.refresh = true
+    })
+    updateTimeRemaining()
+  }, timeRemaining)
+}
 
 /**
  * 获取农历日期
@@ -111,7 +128,9 @@ const calcResult = () => {
   align-items: start;
   text-align: start;
   justify-content: start;
-  padding: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(30px)
 }
 
 .result > :not(:last-child) div {
@@ -119,7 +138,7 @@ const calcResult = () => {
 }
 
 .result > div > span {
-  color: blueviolet;
+  color: #27ae60;
 }
 
 .type {
@@ -127,6 +146,7 @@ const calcResult = () => {
   justify-content: center;
   align-items: center;
   font-size: 40px;
+  color: #000;
 }
 
 .main {
@@ -138,6 +158,7 @@ const calcResult = () => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 10px;
   /*animation: opacity-translate 1s;*/
 }
 
@@ -160,14 +181,13 @@ const calcResult = () => {
 
 @keyframes opacity-translate {
   0% {
-    transform: translateY(-30px);
+    transform: translateY(-10px);
     opacity: 0;
   }
 
   100% {
     transform: translateY(0);
     opacity: 1;
-    background-color: #5f93a0;
   }
 }
 
