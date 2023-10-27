@@ -42,6 +42,7 @@ const state = reactive({
   lunarDay: 0,
   lunarHour: 0,
   refresh: true,
+  nextUpdateTime: "",
 });
 
 onMounted(() => {
@@ -54,7 +55,8 @@ const updateTimeRemaining = () => {
   const now = new Date();
   const nextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(now.getHours()) + (now.getHours() % 2 === 0 ? 1 : 2), 0, 0, 0).getTime();
   const timeRemaining = nextPeriod - now.getTime();
-  console.log("距下次更新还剩" + (timeRemaining / 1000 / 60).toFixed(0) + "分钟")
+  state.nextUpdateTime = "距下个卦象还剩" + (timeRemaining / 1000 / 60).toFixed(0) + "分钟"
+  console.log(state.nextUpdateTime)
   setTimeout(() => {
     state.refresh = false
     nextTick(() => {
