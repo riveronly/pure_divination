@@ -132,7 +132,6 @@ const calcResult = () => {
 }
 
 .result > div > span {
-
   color: #27424C;
 }
 
