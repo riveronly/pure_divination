@@ -6,14 +6,12 @@
     </div>
 
     <div class="main">
-      <div>
-        <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
-             :key="index"
-             class="result">
-          <div class="type">{{ getTypeNum(2) }} {{ item.type }}</div>
-          <span>{{ item.summary }}</span>
-          <span>{{ item.desc }}</span>
-        </div>
+      <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
+           :key="index"
+           class="result">
+        <div class="type">{{ getTypeNum(2) }} {{ item.type }}</div>
+        <span>{{ item.summary }}</span>
+        <span>{{ item.desc }}</span>
       </div>
     </div>
   </div>
@@ -131,7 +129,7 @@ const calcResult = () => {
   margin-bottom: 10px;
 }
 
-.result > div > span {
+.result > span {
   color: #27424C;
 }
 

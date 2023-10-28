@@ -16,5 +16,4 @@ const stopLoading = () => {
 }
 </script>
 
-<style>
-</style>
+<style></style>
