@@ -10,17 +10,9 @@
         <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
              :key="index"
              class="result">
-          <div class="type">
-            {{ getTypeNum(2) }} {{ item.type }}
-          </div>
-          <div>
-            <span>总结:</span>
-            {{ item.summary }}
-          </div>
-          <div>
-            <span>详情:</span>
-            {{ item.desc }}
-          </div>
+          <div class="type">{{ getTypeNum(2) }} {{ item.type }}</div>
+          <span>{{ item.summary }}</span>
+          <span>{{ item.desc }}</span>
         </div>
       </div>
     </div>
@@ -140,7 +132,8 @@ const calcResult = () => {
 }
 
 .result > div > span {
-  color: #48206F;
+
+  color: #27424C;
 }
 
 .type {
