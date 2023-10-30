@@ -2,7 +2,7 @@
 
   <!--  图标-->
   <div>
-    <img alt="" class="icon" src="/src/asset/icon.svg">
+    <img v-if="false" alt="" class="icon" src="/src/asset/icon.svg">
   </div>
 
   <!--    时间时辰-->
