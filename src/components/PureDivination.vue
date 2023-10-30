@@ -18,7 +18,7 @@
 
   <!--  图标-->
   <div>
-    <img alt="" src="/src/asset/icon.svg">
+    <img alt="" class="icon" src="/src/asset/icon.svg">
   </div>
 
 </template>
@@ -176,6 +176,11 @@ const calcResult = () => {
 .result:last-child {
   opacity: 0;
   animation: opacity-translate 1s forwards;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
 }
 
 @keyframes opacity-translate {
