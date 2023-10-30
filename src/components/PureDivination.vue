@@ -179,8 +179,9 @@ const calcResult = () => {
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  margin: 48px;
+  width: 48px;
+  height: 48px;
 }
 
 @keyframes opacity-translate {
