@@ -1,20 +1,26 @@
 <template>
-  <div>
-    <div class="info">
-      <el-text class="type">{{ getLunarDate() }}</el-text>
-      <el-text class="type">{{ getDate() }}</el-text>
-    </div>
+  <!--    时间时辰-->
+  <div class="timeNowInfo">
+    <el-text class="bigFont">{{ getLunarDate() }}</el-text>
+    <el-text class="bigFont">{{ getDate() }}</el-text>
+  </div>
 
-    <div class="main">
-      <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
-           :key="index"
-           class="result">
-        <div class="type">{{ getTypeNum(2) }} {{ item.type }}</div>
-        <span>{{ item.summary }}</span>
-        <span>{{ item.desc }}</span>
-      </div>
+  <!--    卦象-->
+  <div class="main">
+    <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
+         :key="index"
+         class="result">
+      <div class="bigFont">{{ getTypeNum(2) }} {{ item.type }}</div>
+      <span>{{ item.summary }}</span>
+      <span>{{ item.desc }}</span>
     </div>
   </div>
+
+  <!--  图标-->
+  <div>
+    <img alt="" src="/src/asset/icon.svg">
+  </div>
+
 </template>
 
 <script lang="ts" setup>
@@ -114,6 +120,28 @@ const calcResult = () => {
 </script>
 
 <style scoped>
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.timeNowInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  /*animation: opacity-translate 1s;*/
+}
+
+.bigFont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #000;
+}
+
 .result {
   display: flex;
   flex-direction: column;
@@ -131,27 +159,6 @@ const calcResult = () => {
 
 .result > span {
   color: #27424C;
-}
-
-.type {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  color: #000;
-}
-
-.main {
-  display: flex;
-  flex-direction: row;
-}
-
-.info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  /*animation: opacity-translate 1s;*/
 }
 
 /*
@@ -188,12 +195,12 @@ const calcResult = () => {
     flex-wrap: wrap;
   }
 
-  .info {
+  .timeNowInfo {
     flex-direction: column;
     align-items: start;
   }
 
-  .type {
+  .bigFont {
     font-size: 20px;
   }
 }
