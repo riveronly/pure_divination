@@ -8,7 +8,7 @@
   <!--    时间时辰-->
   <div class="timeNowInfo">
     <el-text class="bigFont">{{ getLunarDate() }}</el-text>
-    <el-text class="bigFont">{{ getDate() }}</el-text>
+    <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
   </div>
 
   <!--    卦象-->
@@ -39,7 +39,7 @@ const state = reactive({
   lunarDay: 0,
   lunarHour: 0,
   refresh: true,
-  nextUpdateTime: "",
+  nextUpdateTime: 0,
 });
 
 onMounted(() => {
@@ -52,30 +52,30 @@ const updateTimeRemaining = () => {
   const now = new Date();
   const nextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(now.getHours()) + (now.getHours() % 2 === 0 ? 1 : 2), 0, 0, 0).getTime();
   const timeRemaining = nextPeriod - now.getTime();
-  state.nextUpdateTime = "距下个卦象还剩" + (timeRemaining / 1000 / 60).toFixed(0) + "分钟"
-  console.log(state.nextUpdateTime)
-  setTimeout(() => {
+  state.nextUpdateTime = Math.floor(timeRemaining / 1000 / 60)
+  console.log("距下个卦象还剩" + state.nextUpdateTime + "分钟")
+  setInterval(() => {
     state.refresh = false
     nextTick(() => {
       calcResult()
       state.refresh = true
     })
     updateTimeRemaining()
-  }, timeRemaining)
+  }, timeRemaining);
 }
 
 /**
  * 获取农历日期
  */
 const getLunarDate = () => {
-  return Lunar.fromDate(new Date()).toString() + "日" + Lunar.fromDate(new Date()).getTimeZhi() + "时";
+  return `${Lunar.fromDate(new Date()).toString()}日${Lunar.fromDate(new Date()).getTimeZhi()}时`;
 };
 
 /**
  * 获取公历日期
  */
-const getDate = () => {
-  return new Date().toLocaleDateString() + "日" + new Date().getHours() + "时";
+const getGregorianDate = () => {
+  return `${new Date().toLocaleDateString()}日${new Date().getHours()}时`;
 };
 
 /**
