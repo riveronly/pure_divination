@@ -1,4 +1,10 @@
 <template>
+
+  <!--  图标-->
+  <div>
+    <img alt="" class="icon" src="/src/asset/icon.svg">
+  </div>
+
   <!--    时间时辰-->
   <div class="timeNowInfo">
     <el-text class="bigFont">{{ getLunarDate() }}</el-text>
@@ -14,11 +20,6 @@
       <span>{{ item.summary }}</span>
       <span>{{ item.desc }}</span>
     </div>
-  </div>
-
-  <!--  图标-->
-  <div>
-    <img alt="" class="icon" src="/src/asset/icon.svg">
   </div>
 
 </template>
