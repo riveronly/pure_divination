@@ -8,4 +8,4 @@
 
 项目原型 https://github.com/kev1nzh37/ask-god
 
-直达链接 https://aicecoke.github.io/PureDivination
+项目直达链接 https://riveronly.github.io/PureDivination/
