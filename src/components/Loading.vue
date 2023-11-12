@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import icon from "../asset/icon.svg"
+import icon from "../asset/icon/icon.svg"
 </script>
 
 <style scoped>
