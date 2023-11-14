@@ -143,49 +143,50 @@ const calcResult = () => {
 .resultInfo {
   display: flex;
   flex-direction: row;
+}
 
-  .bigFont {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
-    color: #000;
+.bigFont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #000;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+  justify-content: start;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+
+  .result > :not(:last-child) div {
+    margin-bottom: 10px;
   }
 
-  .result {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    text-align: start;
-    justify-content: start;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
+  .result > span {
+    color: #27424C;
+  }
 
-    .result > :not(:last-child) div {
-      margin-bottom: 10px;
-    }
+  .result:first-child {
+    opacity: 0;
+    animation: opacity-translate 1s forwards;
+  }
 
-    .result > span {
-      color: #27424C;
-    }
+  .result:nth-child(2) {
+    opacity: 0;
+    animation: opacity-translate 1s forwards;
+  }
 
-    .result:first-child {
-      opacity: 0;
-      animation: opacity-translate 1s forwards;
-    }
-
-    .result:nth-child(2) {
-      opacity: 0;
-      animation: opacity-translate 1s forwards;
-    }
-
-    .result:last-child {
-      opacity: 0;
-      animation: opacity-translate 1s forwards;
-    }
+  .result:last-child {
+    opacity: 0;
+    animation: opacity-translate 1s forwards;
   }
 }
+
 
 .updateInfo {
   color: #27424C;
