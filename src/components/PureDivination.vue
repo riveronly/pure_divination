@@ -1,17 +1,17 @@
 <template>
 
-  <!--  图标-->
+  <!--图标-->
   <div>
-    <img v-if="false" alt="" class="icon" src="/src/asset/icon/icon1.svg">
+    <img v-if="false" alt="" class="icon" src="/src/assets/icon/icon1.svg">
   </div>
 
-  <!--    时间时辰-->
+  <!--时间时辰-->
   <div class="timeNowInfo">
     <el-text class="bigFont">{{ getLunarDate() }}</el-text>
     <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
   </div>
 
-  <!--    卦象-->
+  <!--卦象-->
   <div class="main">
     <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
          :key="index"
@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import {nextTick, onMounted, reactive} from "vue";
 import {Lunar, Solar} from 'lunar-typescript';
-import {hexagramArray} from "./config.ts";
+import {hexagramArray} from "../config/config.ts";
 
 const emit = defineEmits(["stopLoading"])
 const state = reactive({
@@ -39,29 +39,46 @@ const state = reactive({
   lunarDay: 0,
   lunarHour: 0,
   refresh: true,
-  nextUpdateTime: 0,
+  nextUpdateTime: "",
 });
 
 onMounted(() => {
   emit("stopLoading")
   calcResult()
-  updateTimeRemaining()
+  evenThough()
 });
 
-const updateTimeRemaining = () => {
+/**
+ * 每分钟重新计算 更新剩余分钟数
+ */
+const evenThough = () => {
+  millisecondRemaining()
+  setInterval(() => {
+    millisecondRemaining()
+  }, 1000)
+}
+
+/**
+ * 更新剩余分钟数
+ */
+const millisecondRemaining = () => {
   const now = new Date();
   const nextPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(now.getHours()) + (now.getHours() % 2 === 0 ? 1 : 2), 0, 0, 0).getTime();
-  const timeRemaining = nextPeriod - now.getTime();
-  state.nextUpdateTime = Math.floor(timeRemaining / 1000 / 60)
-  console.log("距下个卦象还剩" + state.nextUpdateTime + "分钟")
-  setInterval(() => {
+  const millisecond = nextPeriod - now.getTime();
+
+  if (millisecond === 0) {
     state.refresh = false
     nextTick(() => {
       calcResult()
       state.refresh = true
     })
-    updateTimeRemaining()
-  }, timeRemaining);
+  }
+
+  const minutes = Math.floor(millisecond / 1000 / 60)
+  state.nextUpdateTime = "距下个卦象还剩" + minutes + "分钟"
+  console.log(state.nextUpdateTime)
+
+  return millisecond
 }
 
 /**

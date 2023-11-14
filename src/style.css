@@ -16,7 +16,7 @@ body {
     min-width: 320px;
     min-height: 100vh;
     background-color: #00834a;
-    background-image: url("asset/bg/overlay.png"), url("asset/bg/circles.svg");
+    background-image: url("assets/bg/overlay.png"), url("assets/bg/circles.svg");
     background-position: top left, center center;
     background-repeat: repeat, no-repeat;
     background-size: 200px, cover;
