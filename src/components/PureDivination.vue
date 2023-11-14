@@ -1,18 +1,11 @@
 <template>
-
-  <!--图标-->
-  <div>
-    <img v-if="false" alt="" class="icon" src="/src/assets/icon/icon1.svg">
-  </div>
-
   <!--时间时辰-->
   <div class="timeNowInfo">
     <el-text class="bigFont">{{ getLunarDate() }}</el-text>
     <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
   </div>
-
-  <!--卦象-->
-  <div class="main">
+  <!--卦象结果-->
+  <div class="resultInfo">
     <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
          :key="index"
          class="result">
@@ -21,7 +14,10 @@
       <span>{{ item.desc }}</span>
     </div>
   </div>
-
+  <!--更新时间-->
+  <div class="updateInfo">
+    {{ state.nextUpdateTime }}
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -29,7 +25,6 @@ import {nextTick, onMounted, reactive} from "vue";
 import {Lunar, Solar} from 'lunar-typescript';
 import {hexagramArray} from "../config/config.ts";
 
-const emit = defineEmits(["stopLoading"])
 const state = reactive({
   resultMonth: {type: "", desc: "", summary: ""},
   resultDay: {type: "", desc: "", summary: ""},
@@ -43,7 +38,6 @@ const state = reactive({
 });
 
 onMounted(() => {
-  emit("stopLoading")
   calcResult()
   evenThough()
 });
@@ -139,11 +133,6 @@ const calcResult = () => {
 
 <style scoped>
 
-.main {
-  display: flex;
-  flex-direction: row;
-}
-
 .timeNowInfo {
   display: flex;
   flex-direction: row;
@@ -151,52 +140,55 @@ const calcResult = () => {
   margin-bottom: 10px;
 }
 
-.bigFont {
+.resultInfo {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  color: #000;
+  flex-direction: row;
+
+  .bigFont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: #000;
+  }
+
+  .result {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: start;
+    justify-content: start;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+
+    .result > :not(:last-child) div {
+      margin-bottom: 10px;
+    }
+
+    .result > span {
+      color: #27424C;
+    }
+
+    .result:first-child {
+      opacity: 0;
+      animation: opacity-translate 1s forwards;
+    }
+
+    .result:nth-child(2) {
+      opacity: 0;
+      animation: opacity-translate 1s forwards;
+    }
+
+    .result:last-child {
+      opacity: 0;
+      animation: opacity-translate 1s forwards;
+    }
+  }
 }
 
-.result {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  text-align: start;
-  justify-content: start;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.2);
-
-  .result > :not(:last-child) div {
-    margin-bottom: 10px;
-  }
-
-  .result > span {
-    color: #27424C;
-  }
-
-  .result:first-child {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
-
-  .result:nth-child(2) {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
-
-  .result:last-child {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
-}
-
-.icon {
-  margin: 48px;
-  width: 48px;
-  height: 48px;
+.updateInfo {
+  color: #27424C;
 }
 
 @keyframes opacity-translate {
@@ -212,7 +204,7 @@ const calcResult = () => {
 }
 
 @media only screen and (max-width: 1080px) {
-  .main {
+  .resultInfo {
     flex-wrap: wrap;
   }
 
