@@ -187,10 +187,11 @@ const calcResult = () => {
   animation: opacity-translate 1s forwards;
 }
 
-
 .updateInfo {
   color: #27424C;
   margin-top: 10px;
+  opacity: 0;
+  animation: opacity-translate 1s 1s forwards;
 }
 
 @keyframes opacity-translate {
