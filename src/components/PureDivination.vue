@@ -162,34 +162,35 @@ const calcResult = () => {
   padding: 20px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
+}
 
-  .result > :not(:last-child) div {
-    margin-bottom: 10px;
-  }
+.result > :not(:last-child) div {
+  margin-bottom: 10px;
+}
 
-  .result > span {
-    color: #27424C;
-  }
+.result > span {
+  color: #27424C;
+}
 
-  .result:first-child {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
+.result:first-child {
+  opacity: 0;
+  animation: opacity-translate 1s forwards;
+}
 
-  .result:nth-child(2) {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
+.result:nth-child(2) {
+  opacity: 0;
+  animation: opacity-translate 1s forwards;
+}
 
-  .result:last-child {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-  }
+.result:last-child {
+  opacity: 0;
+  animation: opacity-translate 1s forwards;
 }
 
 
 .updateInfo {
   color: #27424C;
+  margin-top: 10px;
 }
 
 @keyframes opacity-translate {
