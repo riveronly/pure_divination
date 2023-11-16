@@ -7,8 +7,7 @@
   <!--卦象结果-->
   <div class="resultInfo">
     <div v-for="(item, index) in [state.resultMonth, state.resultDay, state.resultHour]" v-if="state.refresh"
-         :key="index"
-         class="result">
+         :key="index" class="result">
       <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
       <span>{{ item.summary }}</span>
     </div>
@@ -139,11 +138,6 @@ const calcResult = () => {
   margin-bottom: 10px;
 }
 
-.resultInfo {
-  display: flex;
-  flex-direction: row;
-}
-
 .bigFont {
   display: flex;
   justify-content: center;
@@ -152,16 +146,21 @@ const calcResult = () => {
   color: #000;
 }
 
+.resultInfo {
+  display: flex;
+  flex-direction: row;
+}
+
 .result {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: start;
   text-align: start;
-  justify-content: start;
   padding: 20px;
-  flex: 1;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.2);
+  margin-right: 10px;
 }
 
 .result > span {
@@ -169,7 +168,6 @@ const calcResult = () => {
 }
 
 .result:not(:last-child) {
-  margin-right: 10px;
   opacity: 0;
   animation: opacity-translate 1s forwards;
 }
@@ -201,6 +199,11 @@ const calcResult = () => {
 @media only screen and (max-width: 1080px) {
   .resultInfo {
     flex-wrap: wrap;
+  }
+
+  .result {
+    width: 100%;
+    margin-bottom: 10px;
   }
 
   .timeNowInfo {
