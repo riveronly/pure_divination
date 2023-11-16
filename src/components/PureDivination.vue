@@ -6,10 +6,10 @@
   </div>
   <!--卦象结果-->
   <div class="resultInfo">
-    <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
+    <div v-for="(item, index) in [state.resultMonth, state.resultDay, state.resultHour]" v-if="state.refresh"
          :key="index"
          class="result">
-      <div class="bigFont">{{ getTypeNum(2) }} {{ item.type }}</div>
+      <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
       <span>{{ item.summary }}</span>
     </div>
   </div>
@@ -164,20 +164,12 @@ const calcResult = () => {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.result > :not(:last-child) {
-  margin-bottom: 10px;
-}
-
 .result > span {
   color: #27424C;
 }
 
-.result:first-child {
-  opacity: 0;
-  animation: opacity-translate 1s forwards;
-}
-
-.result:nth-child(2) {
+.result:not(:last-child) {
+  margin-right: 10px;
   opacity: 0;
   animation: opacity-translate 1s forwards;
 }
