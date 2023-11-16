@@ -6,12 +6,11 @@
   </div>
   <!--卦象结果-->
   <div class="resultInfo">
-    <div v-for="(item, index) in [/*state.resultMonth, state.resultDay,*/ state.resultHour]" v-if="state.refresh"
+    <div v-for="(item, index) in [state.resultMonth, state.resultDay, state.resultHour]" v-if="state.refresh"
          :key="index"
          class="result">
-      <div class="bigFont">{{ getTypeNum(2) }} {{ item.type }}</div>
+      <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
       <span>{{ item.summary }}</span>
-      <span>{{ item.desc }}</span>
     </div>
   </div>
   <!--更新时间-->
