@@ -5,15 +5,15 @@
     <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
   </div>
   <!--卦象结果-->
-  <div class="resultInfo">
-    <div v-for="(item, index) in [state.resultMonth, state.resultDay, state.resultHour]" v-if="state.refresh"
+  <div v-if="state.refresh" class="resultInfo">
+    <div v-for="(item, index) in [state.resultMonth, state.resultDay, state.resultHour]"
          :key="index" class="result">
       <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
       <span>{{ item.summary }}</span>
     </div>
   </div>
   <!--更新时间-->
-  <div class="updateInfo">
+  <div v-if="state.refresh" class="updateInfo">
     <div>{{ state.fortuneMsg }}</div>
     <div>{{ state.nextUpdateTime }}</div>
   </div>
