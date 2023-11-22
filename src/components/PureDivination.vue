@@ -14,19 +14,22 @@
   </div>
   <!--更新时间-->
   <div class="updateInfo">
-    {{ state.nextUpdateTime }}
+    <div>{{ state.fortuneMsg }}</div>
+    <div>{{ state.nextUpdateTime }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {nextTick, onMounted, reactive} from "vue";
 import {Lunar, Solar} from 'lunar-typescript';
-import {hexagramArray} from "../config/config.ts";
+import {fortuneArray, hexagramArray} from "../config/config.ts";
 
 const state = reactive({
   resultMonth: {type: "", desc: "", summary: ""},
   resultDay: {type: "", desc: "", summary: ""},
   resultHour: {type: "", desc: "", summary: ""},
+
+  fortuneMsg: '',
 
   lunarMonth: 0,
   lunarDay: 0,
@@ -120,12 +123,14 @@ const calcResult = () => {
   palacePosition += (lunarDay - 1) % 6;
   positionIndex = ((palacePosition % 6) || 6) - 1;
   state.resultDay = hexagramArray[positionIndex];
+  const fortuneDay = fortuneArray[positionIndex];
 
   //时
   state.lunarHour = lunarHour;
   palacePosition += (lunarHour - 1) % 6;
   positionIndex = ((palacePosition % 6) || 6) - 1;
   state.resultHour = hexagramArray[positionIndex];
+  state.fortuneMsg = fortuneDay[positionIndex].msg
 };
 </script>
 
@@ -181,6 +186,7 @@ const calcResult = () => {
   color: #27424C;
   margin-top: 10px;
   opacity: 0;
+  flex-direction: column;
   animation: opacity-translate 1s 1s forwards;
 }
 
