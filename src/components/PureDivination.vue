@@ -120,9 +120,9 @@ const calcResult = () => {
 
   //日
   state.lunarDay = lunarDay;
+  positionIndex += 1;//闰二月2023
   palacePosition += (lunarDay - 1) % 6;
   positionIndex = ((palacePosition % 6) || 6) - 1;
-  positionIndex += 1;//闰二月2023
   state.resultDay = hexagramArray[positionIndex];
   const fortuneDay = fortuneArray[positionIndex];
 
