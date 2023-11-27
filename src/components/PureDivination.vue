@@ -113,14 +113,13 @@ const calcResult = () => {
   let positionIndex: number;
 
   //月
-  state.lunarMonth = lunarMonth;
+  state.lunarMonth = lunarMonth + 1;//2023年闰二月，所以加了1
   palacePosition = lunarMonth % 6 || 6;
   positionIndex = palacePosition - 1;
   state.resultMonth = hexagramArray[positionIndex];
 
   //日
   state.lunarDay = lunarDay;
-  positionIndex += 1;//闰二月2023
   palacePosition += (lunarDay - 1) % 6;
   positionIndex = ((palacePosition % 6) || 6) - 1;
   state.resultDay = hexagramArray[positionIndex];
