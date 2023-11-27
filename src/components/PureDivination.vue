@@ -14,8 +14,8 @@
   </div>
   <!--更新时间-->
   <div v-if="state.refresh" class="updateInfo">
-    <div>{{ `2023年闰二月 月份+1` }}</div>
     <div>{{ state.fortuneMsg }}</div>
+    <div>{{ `2023年闰二月 月份+1` }}</div>
     <div>{{ state.nextUpdateTime }}</div>
   </div>
 </template>
