@@ -121,7 +121,7 @@ const calcResult = () => {
   state.lunarYearMonth = LunarYear.fromYear(state.thisYearNumber).getLeapMonth();
 
   //月
-  state.lunarMonth = lunarMonth + (state.lunarYearMonth === 0 ? 0 : 1);//2023年闰二月，所以加了1
+  state.lunarMonth = lunarMonth + (state.lunarYearMonth === 0 ? 0 : 1);
   palacePosition = state.lunarMonth % 6 || 6;
   positionIndex = palacePosition - 1;
   state.resultMonth = hexagramArray[positionIndex];
