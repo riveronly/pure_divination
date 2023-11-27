@@ -15,14 +15,14 @@
   <!--更新时间-->
   <div v-if="state.refresh" class="updateInfo">
     <div>{{ state.fortuneMsg }}</div>
-    <div>{{ `2023年闰二月 月份+1` }}</div>
+    <div>{{ state.lunarYearMonth === 0 ? `` : `${state.thisYearNumber}年闰${state.lunarYearMonth}月 月份+1` }}</div>
     <div>{{ state.nextUpdateTime }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {nextTick, onMounted, reactive} from "vue";
-import {Lunar, Solar} from 'lunar-typescript';
+import {Lunar, LunarYear, Solar, SolarYear} from 'lunar-typescript';
 import {fortuneArray, hexagramArray} from "../config/config.ts";
 
 const state = reactive({
@@ -37,6 +37,8 @@ const state = reactive({
   lunarHour: 0,
   refresh: true,
   nextUpdateTime: "",
+  thisYearNumber: 0,
+  lunarYearMonth: 0,
 });
 
 onMounted(() => {
@@ -113,8 +115,13 @@ const calcResult = () => {
   let palacePosition: number; //宫位(1-6)
   let positionIndex: number;
 
+  //本年
+  state.thisYearNumber = SolarYear.fromDate(new Date()).getYear();
+  //本年是否有闰月，是闰几月
+  state.lunarYearMonth = LunarYear.fromYear(state.thisYearNumber).getLeapMonth();
+
   //月
-  state.lunarMonth = lunarMonth + 1;//2023年闰二月，所以加了1
+  state.lunarMonth = lunarMonth + (state.lunarYearMonth === 0 ? 0 : 1);//2023年闰二月，所以加了1
   palacePosition = state.lunarMonth % 6 || 6;
   positionIndex = palacePosition - 1;
   state.resultMonth = hexagramArray[positionIndex];
