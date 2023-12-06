@@ -15,7 +15,10 @@
   <!--更新时间-->
   <div v-if="state.refresh" class="updateInfo">
     <div>{{ state.fortuneMsg }}</div>
-    <div>{{ state.lunarYearMonth === 0 ? `` : `${state.thisYearNumber}年闰${state.lunarYearMonth}月 月份+1` }}</div>
+    <div>{{
+        state.lunarMonth > state.lunarYearMonth ? (state.lunarYearMonth === 0 ? `` : `${state.thisYearNumber}年闰${state.lunarYearMonth}月 月份+1`) : ``
+      }}
+    </div>
     <div>{{ state.nextUpdateTime }}</div>
   </div>
 </template>
@@ -121,7 +124,7 @@ const calcResult = () => {
   state.lunarYearMonth = LunarYear.fromYear(state.thisYearNumber).getLeapMonth();
 
   //月
-  state.lunarMonth = lunarMonth + (state.lunarYearMonth === 0 ? 0 : 1);
+  state.lunarMonth = lunarMonth + (lunarMonth > state.lunarYearMonth ? (state.lunarYearMonth === 0 ? 0 : 1) : 0);
   palacePosition = state.lunarMonth % 6 || 6;
   positionIndex = palacePosition - 1;
   state.resultMonth = hexagramArray[positionIndex];
