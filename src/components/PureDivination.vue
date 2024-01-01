@@ -27,7 +27,9 @@
                 state.lunarMonth > state.lunarYearMonth
                     ? state.lunarYearMonth === 0
                         ? ``
-                        : `${state.thisYearNumber}年闰${state.lunarYearMonth}月 月份+1`
+                        : `${2023 || state.thisYearNumber}年闰${
+                              state.lunarYearMonth
+                          }月 月份+1`
                     : ``
             }}
         </div>
@@ -97,7 +99,7 @@ const millisecondRemaining = () => {
 
     const minutes = Math.floor(millisecond / 1000 / 60)
     state.nextUpdateTime = '距下个卦象还剩' + minutes + '+分钟'
-    console.log(state.nextUpdateTime)
+    // console.log(state.nextUpdateTime)
 
     return millisecond
 }
@@ -148,8 +150,9 @@ const calcResult = () => {
     state.thisYearNumber = SolarYear.fromDate(new Date()).getYear()
     //本年是否有闰月，是闰几月
     state.lunarYearMonth = LunarYear.fromYear(
-        state.thisYearNumber
+        2023 || state.thisYearNumber
     ).getLeapMonth()
+    console.log('ocean-' + '' + '->' + state.lunarYearMonth)
 
     //月
     state.lunarMonth =
