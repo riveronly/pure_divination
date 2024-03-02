@@ -28,8 +28,8 @@
                     ? state.lunarYearMonth === 0
                         ? ``
                         : `${2023 || state.thisYearNumber}年闰${
-                              state.lunarYearMonth
-                          }月 月份+1`
+                            state.lunarYearMonth
+                        }月 月份+1`
                     : ``
             }}
         </div>
@@ -128,8 +128,8 @@ const getTypeNum = (index: number) => {
     return index === 0
         ? state.lunarMonth
         : index === 1
-          ? state.lunarDay
-          : state.lunarHour
+            ? state.lunarDay
+            : state.lunarHour
 }
 
 /**

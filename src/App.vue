@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <PureDivination />
+        <MainPage />
     </div>
 </template>
 
 <script lang="ts" setup>
-import PureDivination from './components/PureDivination.vue'
+import MainPage from './components/MainPage.vue'
 </script>
 
 <style>
