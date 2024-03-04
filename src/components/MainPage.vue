@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, reactive } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 import { Lunar, LunarYear, Solar, SolarYear } from 'lunar-typescript'
 import { fortuneArray, hexagramArray } from '../config/config.ts'
 
@@ -58,10 +58,23 @@ const state = reactive({
     lunarYearMonth: 0
 })
 
+const bgRef = ref('')
+
 onMounted(() => {
+    fetchBackground()
     calcResult()
     evenThough()
 })
+
+/**
+ * 获取每日壁纸
+ */
+const fetchBackground = async () => {
+    const bg = await fetch('/api/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN')
+    const json = await bg.json()
+    bgRef.value = 'https://cn.bing.com' + json.images[0].url
+    document.body.style.background = `url(${bgRef.value})`
+}
 
 /**
  * 每分钟重新计算 更新剩余分钟数
