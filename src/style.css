@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -8,23 +13,3 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 }
-
-body {
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-    background-color: #00834a;
-    background-image: url("assets/bg/overlay.png"), url("assets/bg/circles.svg");
-    background-position: top left, center center;
-    background-repeat: repeat, no-repeat;
-    background-size: 200px, cover;
-}
-
-#app {
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-}
-
