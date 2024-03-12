@@ -61,7 +61,7 @@ const state = reactive({
 const bgRef = ref('')
 
 onMounted(() => {
-    // fetchBackground()
+    fetchBackground()
     calcResult()
     evenThough()
 })
