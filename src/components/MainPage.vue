@@ -61,7 +61,7 @@ const state = reactive({
 const bgRef = ref('')
 
 onMounted(() => {
-    fetchBackground()
+    // fetchBackground()
     calcResult()
     evenThough()
 })
@@ -121,9 +121,18 @@ const millisecondRemaining = () => {
  * 获取农历日期
  */
 const getLunarDate = () => {
-    return `${Lunar.fromDate(new Date()).toString()}日${Lunar.fromDate(
-        new Date()
-    ).getTimeZhi()}时`
+    let lunarDay = Solar.fromDate(new Date()).getLunar()
+    const lunarHour = Solar.fromDate(new Date()).getLunar().getTimeZhiIndex() + 1
+    if (lunarHour === 1){//如果是子时，已是下一天
+        // 获取当前日期
+        let today = new Date();
+        // 创建明天的日期
+        let tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        lunarDay = Solar.fromDate(tomorrow).getLunar()
+    }
+    return `${lunarDay}
+    ${Lunar.fromDate(new Date()).getTimeZhi()}时`
 }
 
 /**
@@ -181,6 +190,9 @@ const calcResult = () => {
 
     //日
     state.lunarDay = lunarDay
+    if (lunarHour === 1){//如果是子时，已是下一天
+        state.lunarDay = lunarDay + 1
+    }
     palacePosition += (state.lunarDay - 1) % 6
     positionIndex = (palacePosition % 6 || 6) - 1
     state.resultDay = hexagramArray[positionIndex]
