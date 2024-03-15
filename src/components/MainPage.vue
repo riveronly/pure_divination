@@ -1,6 +1,6 @@
 <template>
     <!--时间时辰-->
-    <div class="timeNowInfo">
+    <div v-if="state.refresh" class="timeNowInfo">
         <el-text class="bigFont">{{ getLunarDate() }}</el-text>
         <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
     </div>
