@@ -27,7 +27,7 @@
                 state.lunarMonth > state.lunarYearMonth
                     ? state.lunarYearMonth === 0
                         ? ``
-                        : `${2023 || state.thisYearNumber}年闰${
+                        : `${state.thisYearNumber}年闰${
                             state.lunarYearMonth
                         }月 月份+1`
                     : ``
