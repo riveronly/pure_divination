@@ -108,7 +108,7 @@ const millisecondRemaining = () => {
     }
 
     const minutes = Math.floor(millisecond / 1000 / 60)
-    state.nextUpdateTime = '距下个卦象还剩' + minutes + '+分钟'
+    state.nextUpdateTime = '距下个卦象还剩' + minutes + '多分钟'
     // console.log(state.nextUpdateTime)
 
     return millisecond
