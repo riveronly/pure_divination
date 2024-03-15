@@ -34,11 +34,14 @@
             }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
+        <div v-on:click="refreshMain" class="result" style="width: 20px;height: 20px;padding: 8px;margin-right: 0">
+            <img src="@/assets/icon/refresh-circle.svg" alt="" />
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive } from 'vue'
 import { Lunar, LunarYear, Solar, SolarYear } from 'lunar-typescript'
 import { fortuneArray, hexagramArray } from '../config/config.ts'
 
@@ -58,23 +61,21 @@ const state = reactive({
     lunarYearMonth: 0
 })
 
-const bgRef = ref('')
-
 onMounted(() => {
-    fetchBackground()
     calcResult()
     evenThough()
 })
 
 /**
- * 获取每日壁纸
+ * 获取Bing每日壁纸
  */
-const fetchBackground = async () => {
-    const bg = await fetch('/api/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN')
-    const json = await bg.json()
-    bgRef.value = 'https://cn.bing.com' + json.images[0].url
-    document.body.style.background = `url(${bgRef.value})`
-}
+// const fetchBackground = async () => {
+//     const bg = await fetch('/api/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN')
+//     const json = await bg.json()
+//     const bgRef = ref('')
+//     bgRef.value = 'https://cn.bing.com' + json.images[0].url
+//     document.body.style.background = `url(${bgRef.value})`
+// }
 
 /**
  * 每分钟重新计算 更新剩余分钟数
@@ -103,11 +104,7 @@ const millisecondRemaining = () => {
     const millisecond = nextPeriod - now.getTime()
 
     if (millisecond === 0) {
-        state.refresh = false
-        nextTick(() => {
-            calcResult()
-            state.refresh = true
-        })
+        refreshMain()
     }
 
     const minutes = Math.floor(millisecond / 1000 / 60)
@@ -117,18 +114,26 @@ const millisecondRemaining = () => {
     return millisecond
 }
 
+const refreshMain = () => {
+    state.refresh = false
+    nextTick(() => {
+        calcResult()
+        state.refresh = true
+    })
+}
+
 /**
  * 获取农历日期
  */
 const getLunarDate = () => {
     let lunarDay = Solar.fromDate(new Date()).getLunar()
     const lunarHour = Solar.fromDate(new Date()).getLunar().getTimeZhiIndex() + 1
-    if (lunarHour === 1){//如果是子时，已是下一天
+    if (lunarHour === 1) {//如果是子时，已是下一天
         // 获取当前日期
-        let today = new Date();
+        let today = new Date()
         // 创建明天的日期
-        let tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
+        let tomorrow = new Date(today)
+        tomorrow.setDate(today.getDate() + 1)
         lunarDay = Solar.fromDate(tomorrow).getLunar()
     }
     return `${lunarDay}
@@ -190,7 +195,7 @@ const calcResult = () => {
 
     //日
     state.lunarDay = lunarDay
-    if (lunarHour === 1){//如果是子时，已是下一天
+    if (lunarHour === 1) {//如果是子时，已是下一天
         state.lunarDay = lunarDay + 1
     }
     palacePosition += (state.lunarDay - 1) % 6
@@ -256,10 +261,16 @@ const calcResult = () => {
 
 .updateInfo {
     color: #27424c;
-    margin-top: 10px;
     opacity: 0;
     flex-direction: column;
     animation: opacity-translate 1s 1s forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div {
+        margin-top: 10px;
+    }
 }
 
 @keyframes opacity-translate {
