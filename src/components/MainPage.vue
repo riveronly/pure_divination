@@ -21,22 +21,16 @@
     </div>
     <!--更新时间-->
     <div v-if="state.refresh" class="updateInfo">
-        <div>{{ state.fortuneMsg }}</div>
-        <div>
-            {{
-                state.lunarMonth > state.lunarYearMonth
-                    ? state.lunarYearMonth === 0
-                        ? ``
-                        : `${state.thisYearNumber}年闰${
-                            state.lunarYearMonth
-                        }月 月份+1`
-                    : ``
-            }}
+        <div v-if="state.fortuneMsg!==''">{{ state.fortuneMsg }}</div>
+        <div v-if="state.lunarMonth > state.lunarYearMonth">
+            {{ state.lunarYearMonth === 0 ? `` : `${state.thisYearNumber}年闰${
+            state.lunarYearMonth
+        }月 月份+1` }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
-        <div v-on:click="refreshMain" class="result"
-             style="width: 20px;height: 20px;padding: 8px;margin:0">
-            <img src="@/assets/icon/refresh-circle.svg" alt="" />
+        <div class="result" style="width: 20px;height: 20px;padding: 8px;margin:10px 0"
+             v-on:click="refreshMain">
+            <img alt="" src="@/assets/icon/refresh-circle.svg" style="margin: 0" />
         </div>
     </div>
 </template>
