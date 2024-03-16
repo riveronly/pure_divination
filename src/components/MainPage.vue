@@ -34,7 +34,8 @@
             }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
-        <div v-on:click="refreshMain" class="result" style="width: 20px;height: 20px;padding: 8px;margin-right: 0">
+        <div v-on:click="refreshMain" class="result"
+             style="width: 20px;height: 20px;padding: 8px;margin:0">
             <img src="@/assets/icon/refresh-circle.svg" alt="" />
         </div>
     </div>
