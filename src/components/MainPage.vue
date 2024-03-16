@@ -28,9 +28,8 @@
         }月 月份+1` }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
-        <div class="result" style="width: 20px;height: 20px;padding: 8px;margin:0"
-             v-on:click="refreshMain">
-            <img alt="" src="@/assets/icon/refresh-circle.svg" style="margin: 0" />
+        <div class="refreshButton" v-on:click="refreshMain">
+            <img alt="" src="@/assets/icon/refresh-circle.svg" />
         </div>
     </div>
 </template>
@@ -103,7 +102,7 @@ const millisecondRemaining = () => {
     }
 
     const minutes = Math.floor(millisecond / 1000 / 60)
-    state.nextUpdateTime = '距下个卦象还剩' + minutes + '多分钟'
+    state.nextUpdateTime = '此卦象还剩' + minutes + '分钟'
     // console.log(state.nextUpdateTime)
 
     return millisecond
@@ -229,15 +228,15 @@ const calcResult = () => {
 }
 
 .result {
-    display: flex;
     width: 100%;
+    display: flex;
     flex-direction: column;
     align-items: start;
     text-align: start;
+    margin: 5px;
     padding: 20px;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.2);
-    margin-right: 10px;
 }
 
 .result > span {
@@ -268,6 +267,16 @@ const calcResult = () => {
     }
 }
 
+.refreshButton {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 @keyframes opacity-translate {
     0% {
         transform: translateY(-10px);
@@ -287,7 +296,6 @@ const calcResult = () => {
 
     .result {
         width: 100%;
-        margin-bottom: 10px;
     }
 
     .timeNowInfo {
