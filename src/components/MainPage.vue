@@ -28,7 +28,7 @@
         }月 月份+1` }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
-        <div class="result" style="width: 20px;height: 20px;padding: 8px;margin:10px 0"
+        <div class="result" style="width: 20px;height: 20px;padding: 8px;margin:0"
              v-on:click="refreshMain">
             <img alt="" src="@/assets/icon/refresh-circle.svg" style="margin: 0" />
         </div>
