@@ -97,7 +97,7 @@ const millisecondRemaining = () => {
     ).getTime()
     const millisecond = nextPeriod - now.getTime()
 
-    if (millisecond === 0) {
+    if (millisecond <= 0) {
         refreshMain()
     }
 
@@ -171,9 +171,8 @@ const calcResult = () => {
     state.thisYearNumber = SolarYear.fromDate(new Date()).getYear()
     //本年是否有闰月，是闰几月
     state.lunarYearMonth = LunarYear.fromYear(
-        2023 || state.thisYearNumber
+        state.thisYearNumber
     ).getLeapMonth()
-    console.log('ocean-' + '' + '->' + state.lunarYearMonth)
 
     //月
     state.lunarMonth =
