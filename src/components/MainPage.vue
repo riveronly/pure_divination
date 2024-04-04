@@ -1,8 +1,8 @@
 <template>
     <!--时间时辰-->
-    <div v-if="state.refresh" class="timeNowInfo">
-        <el-text class="bigFont">{{ getLunarDate() }}</el-text>
-        <el-text class="bigFont">{{ getGregorianDate() }}</el-text>
+    <div class="timeNowInfo">
+        <div class="bigFont">{{ getLunarDate() }}</div>
+        <div class="bigFont">{{ getGregorianDate() }}</div>
     </div>
     <!--卦象结果-->
     <div v-if="state.refresh" class="resultInfo">
@@ -12,7 +12,6 @@
                 state.resultDay,
                 state.resultHour
             ]"
-            :key="index"
             class="result"
         >
             <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
@@ -22,8 +21,8 @@
     <!--更新时间-->
     <div v-if="state.refresh" class="updateInfo">
         <div v-if="state.fortuneMsg!==''">{{ state.fortuneMsg }}</div>
-        <div v-if="state.lunarMonth > state.lunarYearMonth">
-            {{ state.lunarYearMonth === 0 ? `` : `${state.thisYearNumber}年闰${
+        <div v-if="(state.lunarMonth > state.lunarYearMonth)&&state.lunarYearMonth !== 0">
+            {{ `${state.thisYearNumber}年闰${
             state.lunarYearMonth
         }月 月份+1` }}
         </div>
@@ -51,6 +50,7 @@ const state = reactive({
     lunarHour: 0,
     refresh: true,
     nextUpdateTime: '',
+    nextLunaTime: 0,
     thisYearNumber: 0,
     lunarYearMonth: 0
 })
@@ -61,50 +61,42 @@ onMounted(() => {
 })
 
 /**
- * 获取Bing每日壁纸
- */
-// const fetchBackground = async () => {
-//     const bg = await fetch('/api/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN')
-//     const json = await bg.json()
-//     const bgRef = ref('')
-//     bgRef.value = 'https://cn.bing.com' + json.images[0].url
-//     document.body.style.background = `url(${bgRef.value})`
-// }
-
-/**
  * 每分钟重新计算 更新剩余分钟数
  */
 const evenThough = () => {
-    millisecondRemaining()
+    getNextLunarDate()
+    millisecondRemaining(state.nextLunaTime)
     setInterval(() => {
-        millisecondRemaining()
+        millisecondRemaining(state.nextLunaTime)
     }, 1000)
+}
+
+const getNextLunarDate = () => {
+    const now = new Date()
+    state.nextLunaTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        now.getHours() + (now.getHours() % 2 === 0 ? 1 : 2),
+        0,
+        0,
+        0
+    ).getTime()
 }
 
 /**
  * 更新剩余分钟数
  */
-const millisecondRemaining = () => {
-    const now = new Date()
-    const nextPeriod = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        Math.floor(now.getHours()) + (now.getHours() % 2 === 0 ? 1 : 2),
-        0,
-        0,
-        0
-    ).getTime()
-    const millisecond = nextPeriod - now.getTime()
+const millisecondRemaining = (nextPeriod = 0) => {
+    const millisecond = nextPeriod - new Date().getTime()
+    const second = Math.floor(millisecond / 1000)
+    const formatStr = Math.floor(second / 60) + '分' + (second % 60) + '秒'
 
-    if (millisecond <= 0) {
+    state.nextUpdateTime = '卦象剩余' + formatStr
+
+    if (second <= 0) {
         refreshMain()
     }
-
-    const minutes = Math.floor(millisecond / 1000 / 60)
-    state.nextUpdateTime = '此卦象还剩' + minutes + '分钟'
-    // console.log(state.nextUpdateTime)
-
     return millisecond
 }
 
@@ -113,6 +105,7 @@ const refreshMain = () => {
     nextTick(() => {
         calcResult()
         state.refresh = true
+        getNextLunarDate()
     })
 }
 
