@@ -71,7 +71,7 @@ const getRefreshTime = () => {
 const updateRemaining = () => {
     const millisecond = state.nextLunaTime - new Date().getTime()
     const second = Math.floor(millisecond / 1000)
-    state.nextUpdateTime = '剩余' + Math.floor(second / 60) + '分钟'
+    state.nextUpdateTime = '剩余' + (Math.floor(second / 60) + 1) + '分钟'
     if (second <= 0) {
         refreshMain()
     }
