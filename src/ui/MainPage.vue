@@ -1,42 +1,30 @@
 <template>
-    <!--时间时辰-->
-    <div class="timeNowInfo">
-        <div class="bigFont">{{ getLunarDate() }}</div>
-        <div class="bigFont">{{ getGregorianDate() }}</div>
-    </div>
-    <!--卦象结果-->
-    <div v-if="state.refresh" class="resultInfo">
-        <div
-            v-for="(item, index) in [
+    <div v-if="state.refresh">
+        <div>{{ getLunarDate() }}</div>
+        <div>{{ getGregorianDate() }}</div>
+        <div class="resultDiv">
+            <div v-for="(item) in [
                 state.resultMonth,
                 state.resultDay,
                 state.resultHour
             ]"
-            class="result"
-        >
-            <div class="bigFont">{{ getTypeNum(index) }} {{ item.type }}</div>
-            <span>{{ item.summary }}</span>
+                 class="result"
+            >
+                {{ item.type }}
+            </div>
         </div>
-    </div>
-    <!--更新时间-->
-    <div v-if="state.refresh" class="updateInfo">
         <div v-if="state.fortuneMsg!==''">{{ state.fortuneMsg }}</div>
         <div v-if="(state.lunarMonth > state.lunarYearMonth)&&state.lunarYearMonth !== 0">
-            {{ `${state.thisYearNumber}年闰${
-            state.lunarYearMonth
-        }月 月份+1` }}
+            {{ `${state.thisYearNumber}年闰${state.lunarYearMonth}月` }}
         </div>
         <div>{{ state.nextUpdateTime }}</div>
-        <div class="refreshButton" v-on:click="refreshMain">
-            <img alt="" src="@/assets/icon/refresh-circle.svg" />
-        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { nextTick, onMounted, reactive } from 'vue'
 import { Lunar, LunarYear, Solar, SolarYear } from 'lunar-typescript'
-import { fortuneArray, hexagramArray } from '../config/config.ts'
+import { fortuneArray, hexagramArray } from '../config.ts'
 
 const state = reactive({
     resultMonth: { type: '', desc: '', summary: '' },
@@ -56,22 +44,15 @@ const state = reactive({
 })
 
 onMounted(() => {
-    calcResult()
-    evenThough()
+    getDivination()
+    getRefreshTime()
+    updateRemaining()
+    setInterval(() => {
+        updateRemaining()
+    }, 1000)
 })
 
-/**
- * 每分钟重新计算 更新剩余分钟数
- */
-const evenThough = () => {
-    getNextLunarDate()
-    millisecondRemaining(state.nextLunaTime)
-    setInterval(() => {
-        millisecondRemaining(state.nextLunaTime)
-    }, 1000)
-}
-
-const getNextLunarDate = () => {
+const getRefreshTime = () => {
     const now = new Date()
     state.nextLunaTime = new Date(
         now.getFullYear(),
@@ -85,15 +66,12 @@ const getNextLunarDate = () => {
 }
 
 /**
- * 更新剩余分钟数
+ * 更新 剩余时间
  */
-const millisecondRemaining = (nextPeriod = 0) => {
-    const millisecond = nextPeriod - new Date().getTime()
+const updateRemaining = () => {
+    const millisecond = state.nextLunaTime - new Date().getTime()
     const second = Math.floor(millisecond / 1000)
-    const formatStr = Math.floor(second / 60) + '分' + (second % 60) + '秒'
-
-    state.nextUpdateTime = '卦象剩余' + formatStr
-
+    state.nextUpdateTime = '剩余' + Math.floor(second / 60) + '分钟'
     if (second <= 0) {
         refreshMain()
     }
@@ -103,9 +81,9 @@ const millisecondRemaining = (nextPeriod = 0) => {
 const refreshMain = () => {
     state.refresh = false
     nextTick(() => {
-        calcResult()
+        getDivination()
+        getRefreshTime()
         state.refresh = true
-        getNextLunarDate()
     })
 }
 
@@ -123,8 +101,7 @@ const getLunarDate = () => {
         tomorrow.setDate(today.getDate() + 1)
         lunarDay = Solar.fromDate(tomorrow).getLunar()
     }
-    return `${lunarDay}
-    ${Lunar.fromDate(new Date()).getTimeZhi()}时`
+    return `${lunarDay}${Lunar.fromDate(new Date()).getTimeZhi()}时`
 }
 
 /**
@@ -136,20 +113,19 @@ const getGregorianDate = () => {
 
 /**
  * 获取对应落宫步数
- * @param index
  */
-const getTypeNum = (index: number) => {
-    return index === 0
-        ? state.lunarMonth
-        : index === 1
-            ? state.lunarDay
-            : state.lunarHour
-}
+// const getTypeNum = (index: number) => {
+//     return index === 0
+//         ? state.lunarMonth
+//         : index === 1
+//             ? state.lunarDay
+//             : state.lunarHour
+// }
 
 /**
  * 计算卦象结果
  */
-const calcResult = () => {
+const getDivination = () => {
     const solar = Solar.fromDate(new Date())
     const lunar = solar.getLunar()
 
@@ -199,104 +175,17 @@ const calcResult = () => {
 </script>
 
 <style scoped>
-.timeNowInfo {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
 
-.bigFont {
+.resultDiv {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
-    color: #000;
-}
-
-.resultInfo {
-    display: flex;
-    flex-direction: row;
+    width: 100%;
 }
 
 .result {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    text-align: start;
+    flex: 1;
     margin: 5px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.result > span {
-    color: #27424c;
-}
-
-.result:not(:last-child) {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-}
-
-.result:last-child {
-    opacity: 0;
-    animation: opacity-translate 1s forwards;
-}
-
-.updateInfo {
-    color: #27424c;
-    opacity: 0;
-    flex-direction: column;
-    animation: opacity-translate 1s 1s forwards;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    div {
-        margin-top: 10px;
-    }
-}
-
-.refreshButton {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-@keyframes opacity-translate {
-    0% {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@media only screen and (max-width: 1080px) {
-    .resultInfo {
-        flex-wrap: wrap;
-    }
-
-    .result {
-        width: 100%;
-    }
-
-    .timeNowInfo {
-        flex-direction: column;
-        align-items: start;
-    }
-
-    .bigFont {
-        font-size: 20px;
-    }
+    padding: 10px;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
