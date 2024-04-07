@@ -1,4 +1,12 @@
-export const hexagramArray = [
+export interface Hexagram {
+    type: string
+    title: string
+    desc: string
+    number: string
+    summary: string
+}
+
+export const hexagramArray: Array<Hexagram> = [
     {
         type: '小吉',
         title: '[小吉] 人来喜时，五行属木，临六合，凡谋事主一、五、七有和合、吉利之含义。',
