@@ -1,7 +1,10 @@
 <template>
     <div v-if="state.refresh">
-        <div>{{ getLunarDate() }}</div>
-        <div>{{ getSolarDate() }}</div>
+        <div class="resultDiv" style="justify-content: space-between">
+            <div>{{ getLunarDate() }}</div>
+            <div>{{ getSolarDate() }}</div>
+        </div>
+
         <div class="resultDiv">
             <div v-for="(item) in [
                 state.resultMonth,
