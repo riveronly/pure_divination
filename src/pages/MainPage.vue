@@ -6,42 +6,48 @@
         </div>
 
         <div class="resultDiv">
-            <div v-for="(item) in [
-                state.resultMonth,
-                state.resultDay,
-                state.resultHour
-            ]"
-                 class="result"
-            >
-                {{ item.type }}
+            <div v-show="ref1Show" ref="ref1" class="result">
+                <div v-for="(item,index) in state.lunarMonthArr" class="resultItem">
+                    {{ index + 1 }} {{ item?.type }}
+                </div>
+            </div>
+            <div v-show="ref2Show" ref="ref2" class="result">
+                <div v-for="(item,index) in state.lunarDayArr" class="resultItem">
+                    {{ index + 1 + state.lunarMonthArr.length }} {{ item?.type }}
+                </div>
+            </div>
+            <div v-show="ref3Show" ref="ref3" class="result">
+                <div v-for="(item,index) in state.lunarHourArr" class="resultItem">
+                    {{ index + 1 + state.lunarMonthArr.length + state.lunarDayArr.length }} {{ item?.type }}
+                </div>
             </div>
         </div>
         <div v-if="state.fortuneMsg!==''">{{ state.fortuneMsg }}</div>
-        <div v-if="(state.lunarMonth > state.lunarYearMonth)&&state.lunarYearMonth !== 0">
-            {{ `${state.thisYearNumber}年闰${state.lunarYearMonth}月` }}
-        </div>
         <div>{{ state.nextUpdateTime }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, reactive } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 import { Solar } from 'lunar-typescript'
 import { fortuneArray, Hexagram, hexagramArray } from '../config.ts'
 
+const ref1 = ref<HTMLDivElement | null>(null)
+const ref2 = ref<HTMLDivElement | null>(null)
+const ref3 = ref<HTMLDivElement | null>(null)
+
+const ref1Show = ref<boolean>(true)
+const ref2Show = ref<boolean>(true)
+const ref3Show = ref<boolean>(true)
+
 const state = reactive({
-    resultMonth: {} as Hexagram,
-    resultDay: {} as Hexagram,
-    resultHour: {} as Hexagram,
+    lunarMonthArr: Array<Hexagram>(),
+    lunarDayArr: Array<Hexagram>(),
+    lunarHourArr: Array<Hexagram>(),
     fortuneMsg: '',
-    lunarMonth: 0,
-    lunarDay: 0,
-    lunarHour: 0,
     refresh: true,
     nextUpdateTime: '',
-    nextLunaTime: 0,
-    thisYearNumber: 0,
-    lunarYearMonth: 0
+    nextLunaTime: 0
 })
 
 onMounted(() => {
@@ -101,7 +107,7 @@ const getLunarDate = () => {
  */
 const getSolarDate = () => {
     const solar = Solar.fromDate(new Date())
-    return `${solar.toString()}日${solar.getHour()}时`
+    return `${solar.toString()}日${solar.getHour()}点`
 }
 
 /**
@@ -120,6 +126,7 @@ const getDivination = () => {
         let index = i % hexagramArray.length
         lunarMonthArr[i] = hexagramArray[index]
     }
+    state.lunarMonthArr = lunarMonthArr
 
     let startDayIndex = lunarMonthArr.length > 0 ? hexagramArray.indexOf(lunarMonthArr[lunarMonthArr.length - 1]) : 0
     let lunarDayArr = []
@@ -127,24 +134,34 @@ const getDivination = () => {
         let index = (startDayIndex + i) % hexagramArray.length
         lunarDayArr[i] = hexagramArray[index]
     }
+    state.lunarDayArr = lunarDayArr
 
-    let startHourIndex = lunarDayArr.length > 0 ? hexagramArray.indexOf(lunarDayArr[lunarDayArr.length - 1]) : 0
+    let startHourIndex = state.lunarDayArr.length > 0 ? hexagramArray.indexOf(lunarDayArr[lunarDayArr.length - 1]) : 0
     let lunarHourArr = []
     for (let i = 0; i < lunarHourIndex; i++) {
         let index = (startHourIndex + i) % hexagramArray.length
         lunarHourArr[i] = hexagramArray[index]
     }
+    state.lunarHourArr = lunarHourArr
 
-    //月
-    state.resultMonth = lunarMonthArr[lunarMonthArr.length - 1]
-    //日
-    state.resultDay = lunarDayArr[lunarDayArr.length - 1]
-    //时
-    state.resultHour = lunarHourArr[lunarHourArr.length - 1]
     //日时解析
     state.fortuneMsg = fortuneArray
-        [hexagramArray.indexOf(lunarDayArr[lunarDayArr.length - 1])]
-        [hexagramArray.indexOf(lunarHourArr[lunarHourArr.length - 1])].msg
+        [hexagramArray.findIndex((item) => {
+        return item.type === lunarDayArr[lunarDayArr.length - 1].type
+    })]
+        [hexagramArray.findIndex((item) => {
+        return item.type === lunarHourArr[lunarHourArr.length - 1].type
+    })].msg
+
+    nextTick(() => {
+        ref1.value?.scrollTo({ left: 0, top: ref1.value.scrollHeight, behavior: 'smooth' })
+        ref1.value?.addEventListener('scrollend', (_) => {
+            ref2.value?.scrollTo({ left: 0, top: ref2.value.scrollHeight, behavior: 'smooth' })
+            ref2.value?.addEventListener('scrollend', (_) => {
+                ref3.value?.scrollTo({ left: 0, top: ref3.value.scrollHeight, behavior: 'smooth' })
+            })
+        })
+    })
 }
 </script>
 
@@ -152,14 +169,29 @@ const getDivination = () => {
 
 .resultDiv {
     display: flex;
-    width: 100%;
 }
 
 .result {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     margin: 5px;
-    padding: 10px;
+    height: 2.5rem;
+    padding: 0 10px;
     border-radius: 0.5rem;
     background-color: rgba(255, 255, 255, 0.1);
+    overflow: scroll;
 }
+
+.resultItem {
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result::-webkit-scrollbar {
+    display: none;
+}
+
 </style>
