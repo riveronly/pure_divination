@@ -110,36 +110,53 @@ const getSolarDate = () => {
     return `${solar.toString()}日${solar.getHour()}点`;
 };
 
-const startScrollAnimation = <T extends Element | null>(refNode: T) => {
-    const scrollAnimation = <T extends Element | null>(refNode: T) => {
-        const nextNodeRef: { nextNode: Element | null } = {
-            nextNode: null,
-        };
+type ElementAndNull = HTMLElement | null;
+type DivElementAndNull = HTMLDivElement | null;
+const startScrollAnimation = <T extends ElementAndNull>(refNode: T) => {
+    const nodeArr: ElementAndNull[] = []
 
-        const scrollOptions: ScrollToOptions = {
-            left: 0,
-            top: refNode?.scrollHeight,
-            behavior: "smooth",
-        };
+    const getNextNode = () => {
+        let nextNode: ElementAndNull = null;
 
-        if (refNode && refNode.children.length <= 1) {
-            Promise.resolve().then(() => {
-                scrollAnimation(nextNodeRef.nextNode);
-            });
-        } else {
-            refNode?.addEventListener("scrollend", () => {
-                console.log(nextNodeRef.nextNode);
-                if (nextNodeRef.nextNode) {
-                    scrollAnimation(nextNodeRef.nextNode);
+        if (nodeArr.length > 0) {
+            nextNode = nodeArr.shift() ?? null;
+        }
+
+        return nextNode;
+    };
+
+    const scrollAnimation = <T extends ElementAndNull>(refNode: T) => {
+        if (refNode) {
+            const scrollOptions: ScrollToOptions = {
+                left: 0,
+                top: refNode.scrollHeight,
+                behavior: "smooth",
+            };
+
+            if (refNode.children.length <= 1) {
+                Promise.resolve().then(() => {
+                    scrollAnimation(getNextNode());
+                });
+            } else {
+                const scrollHandler = () => {
+                    refNode.removeEventListener("scrollend", scrollHandler);
+                    refNode.style.overflow = "hidden";
+                    
+                    const nextNode = getNextNode();
+                    if (nextNode) {
+                        scrollAnimation(nextNode);
+                    }
                 }
-            });
-            refNode?.scrollTo(scrollOptions);
+
+                refNode.addEventListener("scrollend", scrollHandler);
+                refNode.scrollTo(scrollOptions);
+            }
         }
 
         return {
-            next: <T extends Element | null>(refNode: T) => {
-                nextNodeRef.nextNode = refNode;
-                return scrollAnimation(refNode);
+            next: function<T extends ElementAndNull>(refNode: T) {
+                nodeArr.push(refNode);
+                return this;
             },
         };
     };
@@ -188,7 +205,7 @@ const getDivination = () => {
         ].msg;
 
     nextTick(() => {
-        startScrollAnimation(ref1.value).next(ref2.value).next(ref3.value);
+        startScrollAnimation<DivElementAndNull>(ref1.value).next<DivElementAndNull>(ref2.value).next<DivElementAndNull>(ref3.value);
     });
 };
 </script>
