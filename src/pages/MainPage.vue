@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="state.fortuneMsg !== ''">{{ state.fortuneMsg }}</div>
+<!--        <div v-if="state.fortuneMsg !== ''">{{ state.fortuneMsg }}</div>-->
         <div>{{ state.nextUpdateTime }}</div>
     </div>
 </template>
