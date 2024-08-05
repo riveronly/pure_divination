@@ -221,6 +221,14 @@ const getDivination = () => {
         startScrollAnimation<DivElementAndNull>(ref1.value).next<DivElementAndNull>(ref2.value).next<DivElementAndNull>(ref3.value)
     })
 }
+
+// 监听页面可见性变化的事件
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        window.location.reload()
+    }
+});
+
 </script>
 
 <style scoped>
